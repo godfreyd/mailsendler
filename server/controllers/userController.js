@@ -26,16 +26,18 @@ class UserController {
 
     async logout(req, res, next) {
         try {
-            
+             
         } catch (error) {
-            
+            console.error(error);
         }
     }
     
 
     async activate(req, res, next) {
         try {
-            
+            const activationLink = req.params.link;
+            await userService.activate(activationLink);
+            return res.redirect(process.env.CLIENT_URL);
         } catch (error) {
             
         }
