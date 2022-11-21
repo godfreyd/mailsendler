@@ -6,6 +6,7 @@ const tokenService = require('../service/tokenService');
 const UserDto = require('../dtos/userDto');
 const ApiError = require('../exceptions/apiError');
 
+
 class UserService {
     async registration(email, password) {
         const candidate = await UserModel.findOne({email});
@@ -53,6 +54,11 @@ class UserService {
             ...tokens,
             user: userDto
         }
+    }
+
+    async logout(refreshToken) {
+        const token = await tokenService.removeToken(refreshToken);
+        return token;
     }
 
 }
