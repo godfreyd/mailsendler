@@ -10,7 +10,7 @@ class UserService {
     async registration(email, password) {
         const candidate = await UserModel.findOne({email});
         if (candidate) {
-            throw ApiError.badRequest(`Пользователь с адресом ${email} уже существует`);
+            throw ApiError.badRequest(`Пользователь с адресом ${email} уже зарегистрирован`);
 
         }
         const hashPassword = await bcrypt.hash(password, 10);
