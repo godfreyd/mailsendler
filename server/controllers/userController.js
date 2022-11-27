@@ -1,6 +1,7 @@
 const userService = require('../service/userService');
 const { validationResult } = require('express-validator');
 const ApiError = require('../exceptions/apiError');
+const MAX_AGE = 30 * 24 * 60 * 60 * 100;
 
 class UserController {
     async registration(req, res, next) {
@@ -11,7 +12,7 @@ class UserController {
             }
             const {email, password} = req.body;
             const userData = await userService.registration(email, password);
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: MAX_AGE, httpOnly: true});
             return res.json(userData);
             
         } catch (error) {
@@ -27,7 +28,7 @@ class UserController {
                 return next(ApiError.badRequest('Ошибка при валидации', errors.array()));
             }
             const userData = await userService.login(email, password);
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: MAX_AGE, httpOnly: true});
             return res.json(userData);
         } catch (error) {
             next(error);
@@ -60,6 +61,10 @@ class UserController {
 
     async refresh(req, res, next) {
         try {
+            const { refreshToken } = res.cookies;
+            const userData = await userService.refresh(refreshToken);
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: MAX_AGE, httpOnly: true});
+            return res.json(userData);
             
         } catch (error) {
             next(error);
