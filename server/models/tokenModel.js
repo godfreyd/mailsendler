@@ -6,5 +6,4 @@ const TokenSchema = new Schema({
 });
 
 // TODO: добавить iP-адресс, FingerPrint браузера
-
 module.exports = model('Token', TokenSchema);
