@@ -73,6 +73,11 @@ class UserService {
         const refreshInfo = await this._saveTokens(user);
         return refreshInfo;
     }
+
+    async getAllusers() {
+        const users = await UserModel.find();
+        return users;
+    }
 }
 
 module.exports = new UserService();
